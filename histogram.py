@@ -21,10 +21,7 @@ print(f"Score Min: {min}")
 print(f"Score Max: {max}")
 
 dist = ['Normal', 
-        'Uniform', 
-        'Exponential', 
-        'Poisson', 
-        'Triangular',
+        'Uniform',
         'Binomial', 
         'Gamma', 
         'Beta', 
@@ -36,78 +33,51 @@ def histogram():
     while True:
         user = input(f"\nSelect a distribution to visualize ({', '.join(dist)}) or 'exit' to quit: ")
         if user.lower() == 'normal':
-            normal_scores = np.random.normal(mean, standard_deviation, size=len(scores))
-            plt.hist(normal_scores, bins=20, density=True, alpha=0.6, color='g')
+            plt.hist(scores, bins=20, density=True, alpha=0.6, color='g')
             plt.text(0.02, 0.95, f'Data: final_score\nMean: {mean:.2f}\nStd Dev: {standard_deviation:.2f}', 
                      transform=plt.gca().transAxes, verticalalignment='top', 
                      bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8), fontsize=9)
         elif user.lower() == 'uniform':
-            min_attendance_rate = np.min(attendance_rate)
-            max_attendance_rate = np.max(attendance_rate)
-            uniform_scores = np.random.uniform(min_attendance_rate, max_attendance_rate, size=len(scores))
-            plt.hist(uniform_scores, bins=20, density=True, alpha=0.6, color='b')
-            plt.text(0.02, 0.95, f'Data: attendance_rate\nMin: {min_attendance_rate:.2f}\nMax: {max_attendance_rate:.2f}', 
-                     transform=plt.gca().transAxes, verticalalignment='top', 
-                     bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8), fontsize=9)
-        elif user.lower() == 'exponential':
-            exp_mean = weekly_hours.mean()
-            exponential_scores = np.random.exponential(exp_mean, size=len(scores))
-            plt.hist(exponential_scores, bins=20, density=True, alpha=0.6, color='r')
-            plt.text(0.02, 0.95, f'Data: study_hours_per_week\nMean: {exp_mean:.2f}', 
-                     transform=plt.gca().transAxes, verticalalignment='top', 
-                     bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8), fontsize=9)
-        elif user.lower() == 'poisson':
-            mean_age = np.mean(age)
-            poisson_scores = np.random.poisson(mean_age, size=len(scores))
-            plt.hist(poisson_scores, bins=20, density=True, alpha=0.6, color='c')
-            plt.text(0.02, 0.95, f'Data: age\nMean: {mean_age:.2f}', 
+            min_previous_score = np.min(data['previous_score'])
+            max_previous_score = np.max(data['previous_score'])
+            plt.hist(data['previous_score'], bins=20, density=True, alpha=0.6, color='b')
+            plt.text(0.02, 0.95, f'Data: previous_score\nMin: {min_previous_score:.2f}\nMax: {max_previous_score:.2f}', 
                      transform=plt.gca().transAxes, verticalalignment='top', 
                      bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8), fontsize=9)
         elif user.lower() == 'binomial':
             p_passed = np.mean(passed == 'Yes')
-            binomial_scores = np.random.binomial(n=100, p=p_passed, size=len(scores))
-            plt.hist(binomial_scores, bins=20, density=True, alpha=0.6, color='m')
-            plt.text(0.02, 0.95, f'Data: passed\nP(success): {p_passed:.2f}\nn: 100', 
+            passed_binary = (passed == 'Yes').astype(int)
+            plt.hist(passed_binary, bins=20, density=True, alpha=0.6, color='m')
+            plt.text(0.02, 0.95, f'Data: passed\nP(success): {p_passed:.2f}', 
                      transform=plt.gca().transAxes, verticalalignment='top', 
                      bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8), fontsize=9)
         elif user.lower() == 'gamma':
-            gamma_scale = weekly_hours.mean()
-            gamma_scores = np.random.gamma(shape=2, scale=gamma_scale, size=len(scores))
-            plt.hist(gamma_scores, bins=20, density=True, alpha=0.6, color='y')
-            plt.text(0.02, 0.95, f'Data: study_hours_per_week\nShape: 2\nScale: {gamma_scale:.2f}', 
+            gamma_mean = np.mean(scores)
+            gamma_std_dev = np.std(scores)
+            plt.hist(scores, bins=20, density=True, alpha=0.6, color='y')
+            plt.text(0.02, 0.95, f'Data: final_score\nMean: {gamma_mean:.2f}\nStd Dev: {gamma_std_dev:.2f}', 
                      transform=plt.gca().transAxes, verticalalignment='top', 
                      bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8), fontsize=9)
         elif user.lower() == 'beta':
             attendance_mean = np.mean(attendance_rate)
             attendance_std_dev = np.std(attendance_rate)
-            beta_scores = np.random.beta(a=attendance_mean, b=attendance_std_dev, size=len(scores))
-            plt.hist(beta_scores, bins=20, density=True, alpha=0.6, color='k')
-            plt.text(0.02, 0.95, f'Data: attendance_rate\na (mean): {attendance_mean:.2f}\nb (std_dev): {attendance_std_dev:.2f}', 
+            plt.hist(attendance_rate, bins=20, density=True, alpha=0.6, color='k')
+            plt.text(0.02, 0.95, f'Data: attendance_rate\nMean: {attendance_mean:.2f}\nStd Dev: {attendance_std_dev:.2f}', 
                      transform=plt.gca().transAxes, verticalalignment='top', 
                      bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8), fontsize=9)
         elif user.lower() == 'weibull':
-            weibull_shape = weekly_hours.mean()
-            weibull_scores = np.random.weibull(a=weibull_shape, size=len(scores))
-            plt.hist(weibull_scores, bins=20, density=True, alpha=0.6, color='orange')
-            plt.text(0.02, 0.95, f'Data: study_hours_per_week\nShape (a): {weibull_shape:.2f}', 
+            weibull_mean = np.mean(scores)
+            weibull_std_dev = np.std(scores)
+            plt.hist(scores, bins=20, density=True, alpha=0.6, color='orange')
+            plt.text(0.02, 0.95, f'Data: final_score\nMean: {weibull_mean:.2f}\nStd Dev: {weibull_std_dev:.2f}', 
                      transform=plt.gca().transAxes, verticalalignment='top', 
                      bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8), fontsize=9)
         elif user.lower() == 'lognormal':
             log_scores = np.log(scores)
             log_mean = np.mean(log_scores)
             log_std_dev = np.std(log_scores)
-            lognormal_scores = np.random.lognormal(log_mean, log_std_dev, size=len(scores))
-            plt.hist(lognormal_scores, bins=20, density=True, alpha=0.6, color='purple')
+            plt.hist(log_scores, bins=20, density=True, alpha=0.6, color='purple')
             plt.text(0.02, 0.95, f'Data: final_score (log-transformed)\nLog Mean: {log_mean:.2f}\nLog Std Dev: {log_std_dev:.2f}', 
-                     transform=plt.gca().transAxes, verticalalignment='top', 
-                     bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8), fontsize=9)
-        elif user.lower() == 'triangular':
-            min_attendance_rate = np.min(attendance_rate)
-            mode_attendance_rate = np.mean(attendance_rate)
-            max_attendance_rate = np.max(attendance_rate)
-            triangular_scores = np.random.triangular(left=min_attendance_rate, mode=mode_attendance_rate, right=max_attendance_rate, size=len(scores))
-            plt.hist(triangular_scores, bins=20, density=True, alpha=0.6, color='brown')
-            plt.text(0.02, 0.95, f'Data: attendance_rate\nMin: {min_attendance_rate:.2f}\nMode: {mode_attendance_rate:.2f}\nMax: {max_attendance_rate:.2f}', 
                      transform=plt.gca().transAxes, verticalalignment='top', 
                      bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8), fontsize=9)
         elif user.lower() == 'exit':
@@ -120,15 +90,12 @@ def histogram():
         # Set distribution-specific labels
         labels = {
             'normal': ('Final Score', 'Final Score'),
-            'uniform': ('Attendance Rate (%)', 'Attendance Rate (%)'),
-            'exponential': ('Study Hours Per Week', 'Study Hours Per Week'),
-            'poisson': ('Age (years)', 'Age'),
+            'uniform': ('Previous Score', 'Previous Score'),
             'binomial': ('Pass Count (out of 100 trials)', 'Pass Count'),
-            'gamma': ('Study Hours Per Week', 'Study Hours Per Week'),
+            'gamma': ('Final Score', 'Final Score'),
             'beta': ('Attendance Rate (proportion)', 'Attendance Rate'),
-            'weibull': ('Study Hours Per Week', 'Study Hours Per Week'),
-            'lognormal': ('Final Score', 'Final Score'),
-            'triangular': ('Attendance Rate (%)', 'Attendance Rate (%)')
+            'weibull': ('Final Score', 'Final Score'),
+            'lognormal': ('Final Score', 'Final Score')
         }
         
         xlabel, data_label = labels.get(user.lower(), ('Value', 'Value'))
